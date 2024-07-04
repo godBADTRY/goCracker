@@ -10,7 +10,7 @@ goCracker is a fast hash cracking tool made in Go that uses the concurrency of t
 - BLAKE2B256
 - BLAKE2B512
 
-### Instalation
+### Installation
 ```
 curl -LO https://github.com/godBADTRY/goCracker/raw/main/goCracker && chmod +x goCracker
 ```

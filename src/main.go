@@ -87,7 +87,7 @@ func processPasswords(passwordChan <-chan string, menu *Options, resultChan chan
 
 func readDictionary(file *os.File, passwordChan chan<- string, wg *sync.WaitGroup) {
 	defer wg.Done()
-	defer close(passwordChan) // Cerrar el canal passwordChan al final de la lectura
+	defer close(passwordChan) 
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -129,21 +129,21 @@ func main() {
 	passwordChan := make(chan string, menu.threads*20)
 	resultChan := make(chan string, 1)
 
-	// Contexto con tiempo límite
+	
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 	defer cancel()
 
-	// Iniciar goroutine para leer el diccionario
+	
 	wg.Add(1)
 	go readDictionary(file, passwordChan, &wg)
 
-	// Iniciar goroutines para procesar las contraseñas
+	
 	for i := 0; i < menu.threads; i++ {
 		wg.Add(1)
 		go processPasswords(passwordChan, menu, resultChan, &wg, ctx)
 	}
 
-	// Esperar a que todas las goroutines terminen antes de cerrar los canales
+	
 	wg.Wait()
 	close(resultChan)
 
